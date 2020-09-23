@@ -1,4 +1,4 @@
-package agnesm.dev.apis;
+package agnesm.dev.apis.models;
 
 import agnesm.dev.helpers.PokemonHelper;
 import com.fasterxml.jackson.annotation.JsonIgnore;

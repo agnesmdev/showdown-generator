@@ -1,6 +1,10 @@
 package agnesm.dev.apis.impl;
 
 import agnesm.dev.apis.*;
+import agnesm.dev.apis.models.BasicData;
+import agnesm.dev.apis.models.GenerationInfoResponse;
+import agnesm.dev.apis.models.InfoByTypeResponse;
+import agnesm.dev.apis.models.PokemonByIdResponse;
 import agnesm.dev.exceptions.ApiException;
 import agnesm.dev.exceptions.JsonException;
 import agnesm.dev.models.GenerationInfo;
