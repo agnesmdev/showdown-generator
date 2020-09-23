@@ -1,22 +1,34 @@
 package agnesm.dev.controllers;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import agnesm.dev.models.Pokemon;
 import agnesm.dev.services.PokemonService;
-import com.google.inject.Inject;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class PokemonController {
 
+    private Logger logger;
+
     @Autowired
     private PokemonService service;
 
+    public PokemonController(Logger logger) {
+        this.logger = logger;
+    }
+
     @GetMapping("/randomizer")
     CompletableFuture<List<Pokemon>> randomized(@RequestParam int gen, @RequestParam boolean moves) {
-        return service.generateRandomizedTeam(gen, moves);
+        logger.info("Request to generated randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
+        return service.generateRandomizedTeam(gen, moves).thenApply(pokemon -> {
+            logger.info("Successfully generated randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
+            return pokemon;
+        });
     }
 }

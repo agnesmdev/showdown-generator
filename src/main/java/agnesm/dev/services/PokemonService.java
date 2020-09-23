@@ -1,9 +1,12 @@
 package agnesm.dev.services;
 
-import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.apis.PokemonApi;
+import agnesm.dev.controllers.PokemonController;
 import agnesm.dev.helpers.ListHelper;
+import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.models.Pokemon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -13,7 +16,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public interface PokemonService {
@@ -27,15 +29,18 @@ class PokemonServiceImpl extends ListHelper implements PokemonService {
     @Inject
     private PokemonApi pokemonApi;
 
+    private Logger logger;
     private Random random;
 
-    public PokemonServiceImpl() {
+    public PokemonServiceImpl(Logger logger) {
         this.random = new Random();
+        this.logger = logger;
     }
 
     @Override
     public CompletableFuture<List<Pokemon>> generateRandomizedTeam(int gen, boolean moves) {
-        return pokemonApi.getPokemonByGeneration(gen)
+        logger.debug("Generating randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
+        return pokemonApi.getGenerationInfo(gen)
                 .thenCompose(info -> getPokemon(info, moves));
     }
 

@@ -4,7 +4,7 @@ This API allows to create randomized Pokémon teams to compete on [Pokémon Show
 
 ## Launch
 ```
-mvn clean spring-boot:run
+mvn clean spring-boot:run -Dspring-boot.run.arguments=--logging.level.agnesm.dev=DEBUG
 ```
 
 ## /randomizer
