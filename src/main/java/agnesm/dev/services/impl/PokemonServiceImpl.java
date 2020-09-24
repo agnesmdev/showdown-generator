@@ -6,9 +6,9 @@ import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.models.Pokemon;
 import agnesm.dev.services.PokemonService;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,16 +19,14 @@ import java.util.stream.Collectors;
 @Service
 class PokemonServiceImpl extends ListHelper implements PokemonService {
 
-    @Inject
+    @Autowired
     private PokemonApi pokemonApi;
 
+    @Autowired
     private Logger logger;
-    private Random random;
 
-    public PokemonServiceImpl(Logger logger) {
-        this.random = new Random();
-        this.logger = logger;
-    }
+    @Autowired
+    private Random random;
 
     @Override
     public CompletableFuture<List<Pokemon>> generateRandomizedTeam(int gen, boolean moves) {

@@ -1,6 +1,7 @@
 package agnesm.dev.apis.impl;
 
-import agnesm.dev.apis.*;
+import agnesm.dev.apis.PokemonApi;
+import agnesm.dev.apis.PokemonApiClient;
 import agnesm.dev.apis.models.BasicData;
 import agnesm.dev.apis.models.GenerationInfoResponse;
 import agnesm.dev.apis.models.InfoByTypeResponse;
@@ -12,9 +13,9 @@ import agnesm.dev.models.Pokemon;
 import agnesm.dev.models.Type;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -25,18 +26,17 @@ import java.util.stream.Collectors;
 @Component
 class PokemonApiImpl implements PokemonApi {
 
+    @Autowired
     private Logger logger;
+
+    @Autowired
     private HttpClient httpClient;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
-    @Inject
+    @Autowired
     private PokemonApiClient client;
-
-    public PokemonApiImpl(Logger logger) {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-        this.logger = logger;
-    }
 
     @Override
     public CompletableFuture<GenerationInfo> getGenerationInfo(int gen) {
