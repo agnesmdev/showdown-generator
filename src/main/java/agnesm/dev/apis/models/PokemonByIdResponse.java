@@ -1,6 +1,7 @@
 package agnesm.dev.apis.models;
 
 import agnesm.dev.models.Pokemon;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,47 +10,25 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PokemonByIdResponse {
 
-    @JsonProperty("species")
-    private BasicData species;
+    private final BasicData species;
+    private final String name;
+    private final List<PokemonTypeResource> types;
 
-    @JsonProperty("name")
-    private String name;
-
-    @JsonProperty("types")
-    private List<PokemonTypeResource> types;
+    @JsonCreator
+    public PokemonByIdResponse(@JsonProperty(value = "species", required = true) BasicData species,
+                               @JsonProperty(value = "name", required = true) String name,
+                               @JsonProperty(value = "types", required = true) List<PokemonTypeResource> types) {
+        this.species = species;
+        this.name = name;
+        this.types = types;
+    }
 
     public Pokemon toPokemon() {
         return new Pokemon(species.getId(), name, types.get(0).toType(), (types.size() > 1) ? types.get(1).toType() : null);
     }
 
-    @JsonProperty("species")
-    public BasicData getSpecies() {
-        return species;
-    }
-
-    @JsonProperty("species")
-    public void setSpecies(BasicData species) {
-        this.species = species;
-    }
-
-    @JsonProperty("name")
     public String getName() {
         return name;
-    }
-
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonProperty("types")
-    public List<PokemonTypeResource> getTypes() {
-        return types;
-    }
-
-    @JsonProperty("types")
-    public void setTypes(List<PokemonTypeResource> types) {
-        this.types = types;
     }
 
 }

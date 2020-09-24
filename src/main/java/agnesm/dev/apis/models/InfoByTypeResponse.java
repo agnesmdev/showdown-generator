@@ -1,5 +1,6 @@
 package agnesm.dev.apis.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,29 +9,14 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InfoByTypeResponse {
 
-    @JsonProperty("pokemon")
-    private List<PokemonResource> pokemon;
+    private final List<BasicData> moves;
 
-    @JsonProperty("moves")
-    private List<BasicData> moves;
-
-    @JsonProperty("pokemon")
-    public List<PokemonResource> getPokemon() {
-        return pokemon;
+    @JsonCreator
+    public InfoByTypeResponse(@JsonProperty(value = "moves", required = true) List<BasicData> moves) {
+        this.moves = moves;
     }
 
-    @JsonProperty("pokemon")
-    public void setPokemon(List<PokemonResource> pokemon) {
-        this.pokemon = pokemon;
-    }
-
-    @JsonProperty("moves")
     public List<BasicData> getMoves() {
         return moves;
-    }
-
-    @JsonProperty("moves")
-    public void setMoves(List<BasicData> moves) {
-        this.moves = moves;
     }
 }

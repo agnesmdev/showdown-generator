@@ -38,6 +38,13 @@ class PokemonApiImpl implements PokemonApi {
     @Autowired
     private PokemonApiClient client;
 
+    public PokemonApiImpl(Logger logger, HttpClient httpClient, ObjectMapper objectMapper, PokemonApiClient client) {
+        this.logger = logger;
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
+        this.client = client;
+    }
+
     @Override
     public CompletableFuture<GenerationInfo> getGenerationInfo(int gen) {
         logger.debug("Calling Pokémon API to get information about gen " + gen);
