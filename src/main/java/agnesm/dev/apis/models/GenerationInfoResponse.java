@@ -1,15 +1,15 @@
 package agnesm.dev.apis.models;
 
+import agnesm.dev.helpers.ListHelper;
 import agnesm.dev.models.GenerationInfo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GenerationInfoResponse {
+public class GenerationInfoResponse extends ListHelper {
 
     private final int id;
     private final List<BasicData> species;
@@ -30,9 +30,9 @@ public class GenerationInfoResponse {
     public GenerationInfo toGenerationInfo() {
         return new GenerationInfo(
                 id,
-                abilities.stream().map(BasicData::getName).collect(Collectors.toList()),
-                species.stream().map(BasicData::getId).collect(Collectors.toList()),
-                moves.stream().map(BasicData::getName).collect(Collectors.toList())
+                map(abilities, BasicData::getName),
+                map(species, BasicData::getId),
+                map(moves, BasicData::getName)
         );
     }
 

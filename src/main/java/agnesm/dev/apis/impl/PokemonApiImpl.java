@@ -8,6 +8,7 @@ import agnesm.dev.apis.models.InfoByTypeResponse;
 import agnesm.dev.apis.models.PokemonByIdResponse;
 import agnesm.dev.exceptions.ApiException;
 import agnesm.dev.exceptions.JsonException;
+import agnesm.dev.helpers.ListHelper;
 import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.models.Pokemon;
 import agnesm.dev.models.Type;
@@ -21,10 +22,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Component
-class PokemonApiImpl implements PokemonApi {
+class PokemonApiImpl extends ListHelper implements PokemonApi {
 
     @Autowired
     private final Logger logger;
@@ -104,7 +104,7 @@ class PokemonApiImpl implements PokemonApi {
                             InfoByTypeResponse response = objectMapper.readValue(r.body(), InfoByTypeResponse.class);
                             logger.debug("Successfully called Pokémon API and got " + response.getMoves().size() + " moves for type " + type);
 
-                            return response.getMoves().stream().map(BasicData::getName).collect(Collectors.toList());
+                            return map(response.getMoves(), BasicData::getName);
                         } catch (Exception e) {
                             throw new JsonException(e.getMessage());
                         }

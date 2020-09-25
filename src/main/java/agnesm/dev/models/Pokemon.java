@@ -1,11 +1,12 @@
 package agnesm.dev.models;
 
+import agnesm.dev.helpers.ListHelper;
 import agnesm.dev.helpers.StringHelper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Pokemon extends StringHelper {
+public class Pokemon {
 
     private final int number;
     private final String name;
@@ -16,7 +17,7 @@ public class Pokemon extends StringHelper {
 
     public Pokemon(int number, String name, Type primaryType, Type secondaryType) {
         this.number = number;
-        this.name = capitalize(name);
+        this.name = StringHelper.capitalize(name);
         this.primaryType = primaryType;
         this.secondaryType = secondaryType;
     }
@@ -58,10 +59,10 @@ public class Pokemon extends StringHelper {
     }
 
     public void setMoves(List<String> moves) {
-        this.moves = moves.stream().map(this::wordsCapitalize).collect(Collectors.toList());
+        this.moves = ListHelper.map(moves, StringHelper::wordsCapitalize);
     }
 
     public void setAbility(String ability) {
-        this.ability = wordsCapitalize(ability);
+        this.ability = StringHelper.wordsCapitalize(ability);
     }
 }

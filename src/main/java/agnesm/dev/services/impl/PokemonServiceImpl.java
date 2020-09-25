@@ -14,10 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
-class PokemonServiceImpl extends ListHelper implements PokemonService {
+class PokemonServiceImpl implements PokemonService {
 
     @Autowired
     private final PokemonApi pokemonApi;
@@ -37,48 +36,54 @@ class PokemonServiceImpl extends ListHelper implements PokemonService {
     @Override
     public CompletableFuture<List<Pokemon>> generateRandomizedTeam(int gen, boolean moves) {
         logger.debug("Generating randomized team for gen " + gen + " with " + ((moves) ? "" : "no ") + "moves");
-        return pokemonApi.getGenerationInfo(gen)
-                .thenCompose(info -> getPokemon(info, moves));
+        return getGenerationInfo(gen, new ArrayList<>()).thenCompose(info -> getPokemon(info, gen, moves));
     }
 
-    private CompletableFuture<List<Pokemon>> getPokemon(GenerationInfo info, boolean moves) {
-        List<Integer> randomizedIds = randomizedPokemon(info.getPokemon());
+    private CompletableFuture<List<GenerationInfo>> getGenerationInfo(int gen, List<GenerationInfo> info) {
+        if (gen == 0) {
+            return CompletableFuture.completedFuture(info);
+        }
 
-        List<CompletableFuture<Pokemon>> pokemon = randomizedIds.stream().map(id ->
-                pokemonApi.getPokemonById(id).thenCompose(p -> updatePokemon(info, p, moves))
-        ).collect(Collectors.toList());
-
-        CompletableFuture<Void> allFutures = CompletableFuture.allOf(pokemon.toArray(new CompletableFuture[0]));
-        return allFutures.thenApply(future -> pokemon.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+        return pokemonApi.getGenerationInfo(gen).thenCompose(i -> {
+            info.add(i);
+            return getGenerationInfo(gen - 1, info);
+        });
     }
 
-    private CompletableFuture<Pokemon> updatePokemon(GenerationInfo info, Pokemon pokemon, boolean moves) {
-        if (info.getId() >= 3) {
-            pokemon.setAbility(randomizedAbility(info));
+    private CompletableFuture<List<Pokemon>> getPokemon(List<GenerationInfo> info, int gen, boolean moves) {
+        List<Integer> randomizedIds = randomizedPokemon(ListHelper.flatMap(info, GenerationInfo::getPokemon));
+        return ListHelper.traverse(randomizedIds,
+                id -> pokemonApi.getPokemonById(id).thenCompose(p -> updatePokemon(p, gen, moves, info)),
+                new ArrayList<>()
+        );
+    }
+
+    private CompletableFuture<Pokemon> updatePokemon(Pokemon pokemon, int gen, boolean moves, List<GenerationInfo> info) {
+        if (gen >= 3) {
+            pokemon.setAbility(randomizedAbility(ListHelper.flatMap(info, GenerationInfo::getAbilities)));
         }
 
         if (!moves) {
             return CompletableFuture.completedFuture(pokemon);
         }
 
-        return updatePokemonMoves(info, pokemon);
+        return updatePokemonMoves(ListHelper.flatMap(info, GenerationInfo::getMoves), pokemon);
     }
 
-    private CompletableFuture<Pokemon> updatePokemonMoves(GenerationInfo info, Pokemon pokemon) {
+    private CompletableFuture<Pokemon> updatePokemonMoves(List<String> moves, Pokemon pokemon) {
         CompletableFuture<List<String>> primaryMoves = pokemonApi.getMovesByType(pokemon.getPrimaryType());
         CompletableFuture<List<String>> secondaryMoves = (pokemon.getSecondaryType() == null) ?
                 CompletableFuture.completedFuture(Collections.emptyList()) :
                 pokemonApi.getMovesByType(pokemon.getSecondaryType());
 
         return primaryMoves.thenCombine(secondaryMoves, (pm, sm) -> {
-            pokemon.setMoves(randomizedMoves(info.getMoves(), concatLists(pm, sm)));
+            pokemon.setMoves(randomizedMoves(moves, ListHelper.concatLists(pm, sm)));
             return pokemon;
         });
 
     }
 
-    private String randomizedAbility(GenerationInfo info) {
-        List<String> abilities = info.getAbilities();
+    private String randomizedAbility(List<String> abilities) {
         return abilities.get(random.nextInt(abilities.size()));
     }
 
