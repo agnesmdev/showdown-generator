@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -67,8 +68,8 @@ public class PokemonControllerTest extends TestUtil {
 
         mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith("application/json"))
-                .andExpect(content().string(new ObjectMapper().writeValueAsString(pokemon)));
+                .andExpect(content().contentTypeCompatibleWith("text/plain"))
+                .andExpect(content().string(pokemon.stream().map(Pokemon::toShowdownFormat).collect(Collectors.joining("\n"))));
 
         verify(service).generateRandomizedTeam(1, true);
     }
@@ -84,8 +85,8 @@ public class PokemonControllerTest extends TestUtil {
 
         mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith("application/json"))
-                .andExpect(content().string(new ObjectMapper().writeValueAsString(pokemon)));
+                .andExpect(content().contentTypeCompatibleWith("text/plain"))
+                .andExpect(content().string(pokemon.stream().map(Pokemon::toShowdownFormat).collect(Collectors.joining("\n"))));
 
         verify(service).generateRandomizedTeam(2, false);
     }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @RestController
 public class PokemonController {
@@ -21,11 +22,11 @@ public class PokemonController {
     private PokemonService service;
 
     @GetMapping("/randomizer")
-    CompletableFuture<List<Pokemon>> randomizer(@RequestParam int gen, @RequestParam boolean moves) {
+    CompletableFuture<String> randomizer(@RequestParam int gen, @RequestParam boolean moves) {
         logger.info("Request to generated randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
         return service.generateRandomizedTeam(gen, moves).thenApply(pokemon -> {
             logger.info("Successfully generated randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
-            return pokemon;
+            return pokemon.stream().map(Pokemon::toShowdownFormat).collect(Collectors.joining("\n"));
         });
     }
 }
