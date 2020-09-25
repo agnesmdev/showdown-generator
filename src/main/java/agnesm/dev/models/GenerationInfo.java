@@ -4,10 +4,10 @@ import java.util.List;
 
 public class GenerationInfo {
 
-    private int id;
-    private List<String> abilities;
-    private List<Integer> pokemon;
-    private List<String> moves;
+    private final int id;
+    private final List<String> abilities;
+    private final List<Integer> pokemon;
+    private final List<String> moves;
 
     public GenerationInfo(int id, List<String> abilities, List<Integer> pokemon, List<String> moves) {
         this.id = id;

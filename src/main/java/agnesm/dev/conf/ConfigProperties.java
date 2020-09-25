@@ -13,11 +13,11 @@ public class ConfigProperties {
 
     @Primary
     @Bean
-    public String getHost() {
+    public @NotNull String getHost() {
         return host;
     }
 
-    public void setHost(String host) {
+    public void setHost(@NotNull String host) {
         this.host = host;
     }
 }

@@ -27,16 +27,16 @@ import java.util.stream.Collectors;
 class PokemonApiImpl implements PokemonApi {
 
     @Autowired
-    private Logger logger;
+    private final Logger logger;
 
     @Autowired
-    private HttpClient httpClient;
+    private final HttpClient httpClient;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    private PokemonApiClient client;
+    private final PokemonApiClient client;
 
     public PokemonApiImpl(Logger logger, HttpClient httpClient, ObjectMapper objectMapper, PokemonApiClient client) {
         this.logger = logger;

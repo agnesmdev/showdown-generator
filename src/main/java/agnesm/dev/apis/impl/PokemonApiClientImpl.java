@@ -12,7 +12,11 @@ import java.net.http.HttpRequest;
 class PokemonApiClientImpl implements PokemonApiClient {
 
     @Autowired
-    private ConfigProperties properties;
+    private final ConfigProperties properties;
+
+    public PokemonApiClientImpl(ConfigProperties properties) {
+        this.properties = properties;
+    }
 
     @Override
     public HttpRequest getPokemonByGen(int gen) {

@@ -14,17 +14,14 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class PokemonController {
 
+    @Autowired
     private Logger logger;
 
     @Autowired
     private PokemonService service;
 
-    public PokemonController(Logger logger) {
-        this.logger = logger;
-    }
-
     @GetMapping("/randomizer")
-    CompletableFuture<List<Pokemon>> randomized(@RequestParam int gen, @RequestParam boolean moves) {
+    CompletableFuture<List<Pokemon>> randomizer(@RequestParam int gen, @RequestParam boolean moves) {
         logger.info("Request to generated randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
         return service.generateRandomizedTeam(gen, moves).thenApply(pokemon -> {
             logger.info("Successfully generated randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");

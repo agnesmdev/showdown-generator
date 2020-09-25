@@ -20,17 +20,23 @@ import java.util.stream.Collectors;
 class PokemonServiceImpl extends ListHelper implements PokemonService {
 
     @Autowired
-    private PokemonApi pokemonApi;
+    private final PokemonApi pokemonApi;
 
     @Autowired
-    private Logger logger;
+    private final Logger logger;
 
     @Autowired
-    private Random random;
+    private final Random random;
+
+    public PokemonServiceImpl(PokemonApi pokemonApi, Logger logger, Random random) {
+        this.pokemonApi = pokemonApi;
+        this.logger = logger;
+        this.random = random;
+    }
 
     @Override
     public CompletableFuture<List<Pokemon>> generateRandomizedTeam(int gen, boolean moves) {
-        logger.debug("Generating randomized team for gen " + gen + " and " + ((moves) ? "" : "no ") + "moves");
+        logger.debug("Generating randomized team for gen " + gen + " with " + ((moves) ? "" : "no ") + "moves");
         return pokemonApi.getGenerationInfo(gen)
                 .thenCompose(info -> getPokemon(info, moves));
     }

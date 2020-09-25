@@ -1,20 +1,19 @@
 package agnesm.dev.controllers;
 
 import agnesm.dev.exceptions.ApiException;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.inject.Inject;
-import org.slf4j.Logger;
-
 @ControllerAdvice
 public class ApiAdvice {
 
-    private Logger logger;
+    @Autowired
+    private final Logger logger;
 
     public ApiAdvice(Logger logger) {
         this.logger = logger;
