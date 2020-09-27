@@ -6,6 +6,7 @@ import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.models.Pokemon;
 import agnesm.dev.services.PokemonService;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +18,15 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 class PokemonServiceImpl implements PokemonService {
+    private final Logger logger = LoggerFactory.getLogger(PokemonServiceImpl.class);
+
+    private PokemonApi pokemonApi;
+
+    private Random random;
 
     @Autowired
-    private final PokemonApi pokemonApi;
-
-    @Autowired
-    private final Logger logger;
-
-    @Autowired
-    private final Random random;
-
-    public PokemonServiceImpl(PokemonApi pokemonApi, Logger logger, Random random) {
+    public PokemonServiceImpl(PokemonApi pokemonApi, Random random) {
         this.pokemonApi = pokemonApi;
-        this.logger = logger;
         this.random = random;
     }
 
