@@ -15,6 +15,7 @@ import agnesm.dev.models.Type;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpClient;
@@ -46,6 +47,7 @@ class PokemonApiImpl extends ListHelper implements PokemonApi {
     }
 
     @Override
+    @Cacheable("generation-info")
     public CompletableFuture<GenerationInfo> getGenerationInfo(int gen) {
         logger.debug("Calling Pokémon API to get information about gen " + gen);
 
@@ -69,6 +71,7 @@ class PokemonApiImpl extends ListHelper implements PokemonApi {
     }
 
     @Override
+    @Cacheable("pokemon-id")
     public CompletableFuture<Pokemon> getPokemonById(int id) {
         logger.debug("Calling Pokémon API to get pokemon with id " + id);
 
@@ -92,6 +95,7 @@ class PokemonApiImpl extends ListHelper implements PokemonApi {
     }
 
     @Override
+    @Cacheable("moves-type")
     public CompletableFuture<List<String>> getMovesByType(Type type) {
         logger.debug("Calling Pokémon API to get moves of type " + type);
 

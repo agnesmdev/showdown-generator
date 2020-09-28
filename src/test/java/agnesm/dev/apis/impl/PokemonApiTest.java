@@ -60,7 +60,6 @@ public class PokemonApiTest extends TestUtil {
         assertThat(info.getId() == 3);
         assertThat(info.getAbilities().isEmpty());
         assertThat(info.getMoves().isEmpty());
-        assertThat(info.getMoves().isEmpty());
 
         verify(client).getPokemonByGen(3);
         verify(httpClient).sendAsync(request, HttpResponse.BodyHandlers.ofString());
