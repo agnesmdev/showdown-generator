@@ -2,6 +2,7 @@ package agnesm.dev.services.impl;
 
 import agnesm.dev.apis.PokemonApi;
 import agnesm.dev.helpers.ListHelper;
+import agnesm.dev.helpers.PokemonHelper;
 import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.models.Pokemon;
 import agnesm.dev.services.PokemonService;
@@ -18,11 +19,12 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 class PokemonServiceImpl implements PokemonService {
+
     private final Logger logger = LoggerFactory.getLogger(PokemonServiceImpl.class);
 
-    private PokemonApi pokemonApi;
+    private final PokemonApi pokemonApi;
 
-    private Random random;
+    private final Random random;
 
     @Autowired
     public PokemonServiceImpl(PokemonApi pokemonApi, Random random) {
@@ -87,7 +89,7 @@ class PokemonServiceImpl implements PokemonService {
     private List<Integer> randomizedPokemon(List<Integer> ids) {
         List<Integer> result = new ArrayList<>();
 
-        while (result.size() < 6) {
+        while (result.size() < PokemonHelper.POKEMON_TEAM_SIZE) {
             int id = ids.remove(random.nextInt(ids.size()));
             result.add(id);
         }

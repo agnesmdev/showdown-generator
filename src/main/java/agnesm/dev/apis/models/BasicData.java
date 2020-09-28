@@ -1,12 +1,13 @@
 package agnesm.dev.apis.models;
 
-import agnesm.dev.helpers.PokemonHelper;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static agnesm.dev.helpers.PokemonHelper.extractId;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BasicData extends PokemonHelper {
+public class BasicData {
 
     private final String name;
     private final String url;

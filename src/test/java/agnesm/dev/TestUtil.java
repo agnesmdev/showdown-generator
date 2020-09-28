@@ -1,5 +1,6 @@
 package agnesm.dev;
 
+import agnesm.dev.helpers.PokemonHelper;
 import agnesm.dev.models.GenerationInfo;
 import agnesm.dev.models.Pokemon;
 import agnesm.dev.models.Type;
@@ -40,7 +41,7 @@ public abstract class TestUtil {
     }
 
     public List<Pokemon> randomPokemonTeam(boolean moves) {
-        return IntStream.rangeClosed(1, 6).boxed().map(i -> {
+        return IntStream.rangeClosed(1, PokemonHelper.POKEMON_TEAM_SIZE).boxed().map(i -> {
             Pokemon pokemon = randomPokemon();
             if (moves) pokemon.setMoves(randomMoves());
             pokemon.setAbility(randomAbility());
@@ -58,7 +59,7 @@ public abstract class TestUtil {
     }
 
     private List<Integer> randomIntList(Faker faker) {
-        return IntStream.rangeClosed(0, (int) faker.number().randomNumber(2, true)).boxed().collect(Collectors.toList());
+        return IntStream.rangeClosed(1, (int) faker.number().randomNumber(2, true)).boxed().collect(Collectors.toList());
     }
 
     private List<String> randomStringList(Faker faker) {
